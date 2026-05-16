@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.wrangler/
+wrangler-*.log
+.dev.vars
+.dev.vars.*
+.env
+.env.*
+!.env.example
+!.dev.vars.example
+*.log
+.DS_Store
+coverage/
+.nyc_output/
+.tmp/

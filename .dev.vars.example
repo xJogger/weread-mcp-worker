@@ -1,0 +1,4 @@
+# Copy to .dev.vars for local development only. .dev.vars is ignored by Git.
+WEREAD_MCP_ENCRYPTION_KEY="replace-with-a-random-local-dev-secret"
+WEREAD_MCP_SETUP_PASSWORD="replace-with-a-local-setup-password"
+WEREAD_SKILL_VERSION="1.0.3"

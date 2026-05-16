@@ -1,0 +1,12 @@
+name = "weread-mcp-worker"
+main = "src/index.ts"
+compatibility_date = "2026-05-16"
+workers_dev = true
+
+# Non-sensitive defaults only. Secrets must be set with `wrangler secret put`.
+[vars]
+# Optional comma-separated origins accepted when an Origin header is present.
+# ChatGPT/OpenAI origins are included by default in code; add your custom domains here if needed.
+WEREAD_MCP_ALLOWED_ORIGINS = ""
+# The WeRead skill bundle version discovered from weread-skills.zip.
+WEREAD_SKILL_VERSION = "1.0.3"

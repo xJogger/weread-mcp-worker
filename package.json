@@ -1,0 +1,29 @@
+{
+  "name": "weread-mcp-worker",
+  "version": "0.1.0",
+  "description": "A single-user WeRead MCP server for ChatGPT, deployed on Cloudflare Workers.",
+  "type": "module",
+  "private": false,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "check": "npm run typecheck && npm test"
+  },
+  "keywords": [
+    "weread",
+    "wechat-reading",
+    "mcp",
+    "model-context-protocol",
+    "chatgpt",
+    "cloudflare-workers"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260516.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.6",
+    "wrangler": "^4.92.0"
+  }
+}
