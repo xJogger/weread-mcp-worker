@@ -2,11 +2,13 @@ import { getGatewayUrl, getSkillVersion } from "../utils/env";
 import { WeReadApiError } from "./errors";
 import type { WeReadGatewayResponse } from "./types";
 
+type Fetcher = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
+
 export interface WeReadClientOptions {
   apiKey: string;
   endpoint?: string;
   skillVersion?: string;
-  fetcher?: typeof fetch;
+  fetcher?: Fetcher;
 }
 
 function isObject(value: unknown): value is Record<string, unknown> {
@@ -21,13 +23,19 @@ export class WeReadClient {
   private readonly apiKey: string;
   private readonly endpoint: string;
   private readonly skillVersion: string;
-  private readonly fetcher: typeof fetch;
+  private readonly fetcher: Fetcher;
 
   constructor(options: WeReadClientOptions) {
     this.apiKey = options.apiKey.trim();
     this.endpoint = trimTrailingSlash(options.endpoint || "https://i.weread.qq.com/api/agent/gateway");
     this.skillVersion = options.skillVersion || "1.0.3";
-    this.fetcher = options.fetcher || fetch;
+    // Some runtimes, including browser/Worker-like environments, require
+    // fetch to be invoked with the correct global this binding. Storing the
+    // bare global fetch function and calling it later can throw
+    // "Illegal invocation: function called with incorrect this reference".
+    this.fetcher = options.fetcher
+      ? options.fetcher.bind(globalThis)
+      : globalThis.fetch.bind(globalThis);
     if (!this.apiKey) throw new WeReadApiError("WeRead API key is empty.");
   }
 

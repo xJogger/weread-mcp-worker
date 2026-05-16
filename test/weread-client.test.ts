@@ -21,4 +21,25 @@ describe("WeReadClient", () => {
     const client = new WeReadClient({ apiKey: "wrk-test", fetcher });
     await expect(client.call("/shelf/sync")).rejects.toBeInstanceOf(WeReadApiError);
   });
+
+  it("binds fetch to globalThis to avoid illegal invocation errors", async () => {
+    const originalFetch = globalThis.fetch;
+    let sawCorrectThis = false;
+    const boundRequiredFetch = async function (this: typeof globalThis, _url: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+      sawCorrectThis = this === globalThis;
+      if (!sawCorrectThis) throw new TypeError("Illegal invocation: function called with incorrect this reference");
+      const body = JSON.parse(String(init?.body));
+      return new Response(JSON.stringify({ ok: true, api_name: body.api_name }), { status: 200 });
+    } as typeof fetch;
+
+    try {
+      globalThis.fetch = boundRequiredFetch;
+      const client = new WeReadClient({ apiKey: "example-api-key" });
+      const result = await client.call("/shelf/sync");
+      expect(result.ok).toBe(true);
+      expect(sawCorrectThis).toBe(true);
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+  });
 });
