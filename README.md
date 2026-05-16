@@ -98,9 +98,9 @@ sequenceDiagram
 
   User->>Setup: 输入 Setup 密码和微信读书 API Key
   Setup->>Setup: 用 WEREAD_MCP_ENCRYPTION_KEY 加密 API Key
-  Setup-->>User: 返回 /mcp/v1_<encrypted-token>
+  Setup-->>User: 返回 /mcp/v1_encrypted_token
   User->>ChatGPT: 添加远程 MCP Server URL
-  ChatGPT->>Worker: POST /mcp/v1_<encrypted-token> JSON-RPC initialize/tools/list/tools/call
+  ChatGPT->>Worker: POST /mcp/v1_encrypted_token JSON-RPC initialize/tools/list/tools/call
   Worker->>Worker: 解密 URL token 得到 API Key
   Worker->>WeRead: POST /api/agent/gateway Authorization: Bearer API Key
   WeRead-->>Worker: 返回微信读书数据
